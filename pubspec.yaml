@@ -19,7 +19,7 @@ dependencies:
   cupertino_icons: ^1.0.8
 
   # animations
-  flutter_animate: ^4.5.0
+  flutter_animate: ^4.5.2
   fluid_animations: ^1.1.0
   
   # state management
@@ -27,6 +27,7 @@ dependencies:
 
   # Serialization
   dart_mappable: ^4.3.0
+  animated_to: ^0.3.2
 
 
 
