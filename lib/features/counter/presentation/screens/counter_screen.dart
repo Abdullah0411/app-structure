@@ -11,7 +11,6 @@ class _CounterScreenState extends ConsumerState<CounterScreen> {
   final provider = _CounterNotifier.provider;
   @override
   Widget build(BuildContext context) {
-    final state = ref.watch(provider);
     final notifier = ref.read(provider.notifier);
     return Scaffold(
       body: Center(
@@ -20,7 +19,14 @@ class _CounterScreenState extends ConsumerState<CounterScreen> {
             const SizedBox(
               height: 150,
             ),
-            _CounterTextWidget(counter: state.count),
+            Consumer(builder: (context, ref, _) {
+              final state = ref.watch(provider);
+              return _CounterTextWidget(counter: state.count)
+                  .animate(
+                    onPlay: (controller) => controller.repeat(),
+                  )
+                  .scaleXY(begin: 0, end: 1, duration: 500.ms);
+            }),
             const SizedBox(
               height: 150,
             ),
