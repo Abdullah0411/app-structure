@@ -8,43 +8,82 @@ class CounterScreen extends ConsumerStatefulWidget {
 }
 
 class _CounterScreenState extends ConsumerState<CounterScreen> {
+  final s1 = ScrollController();
+  final s2 = ScrollController();
   final provider = _CounterNotifier.provider;
   @override
   Widget build(BuildContext context) {
     final notifier = ref.read(provider.notifier);
+    final state = ref.watch(provider);
     return Scaffold(
       body: Center(
-        child: Column(
-          children: [
-            const SizedBox(
-              height: 150,
-            ),
-            Consumer(builder: (context, ref, _) {
-              final state = ref.watch(provider);
-              return _CounterTextWidget(counter: state.count)
-                  .animate(
-                    onPlay: (controller) => controller.repeat(),
-                  )
-                  .scaleXY(begin: 0, end: 1, duration: 500.ms);
-            }),
-            const SizedBox(
-              height: 150,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                ElevatedButton(
-                  onPressed: notifier.increment,
-                  child: const Text('Increment'),
-                ),
-                ElevatedButton(
-                  onPressed: notifier.decrement,
-                  child: const Text('decrement'),
-                ),
-              ],
-            ),
-          ],
-        ),
+        child: state.addedWidgets.isEmpty || state.removedWidgets.isEmpty
+            ? GridView.count(
+                crossAxisCount: state.addedWidgets.isEmpty ? state.removedWidgets.length : state.addedWidgets.length,
+                children: state.addedWidgets.isEmpty
+                    ? state.removedWidgets
+                        .map(
+                          (e) => Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 12),
+                            child: GestureDetector(
+                              onTap: () => notifier.addOrRemoveWidget(widget: e),
+                              child: e.widget,
+                            ),
+                          ),
+                        )
+                        .toList()
+                    : state.addedWidgets
+                        .map(
+                          (e) => Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 12),
+                            child: GestureDetector(
+                              onTap: () => notifier.addOrRemoveWidget(widget: e),
+                              child: e.widget,
+                            ),
+                          ),
+                        )
+                        .toList(),
+              )
+            : Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Consumer(builder: (context, ref, _) {
+                    return Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: state.addedWidgets
+                          .map(
+                            (e) => Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 12),
+                              child: GestureDetector(
+                                onTap: () => notifier.addOrRemoveWidget(widget: e),
+                                child: e.widget,
+                              ),
+                            ),
+                          )
+                          .toList(),
+                    );
+                  }),
+                  const SizedBox(
+                    height: 100,
+                  ),
+                  Consumer(builder: (context, ref, _) {
+                    return Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: state.removedWidgets
+                          .map(
+                            (e) => Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 12),
+                              child: GestureDetector(
+                                onTap: () => notifier.addOrRemoveWidget(widget: e),
+                                child: e.widget,
+                              ),
+                            ),
+                          )
+                          .toList(),
+                    );
+                  }),
+                ],
+              ),
       ),
     );
   }

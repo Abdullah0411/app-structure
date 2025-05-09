@@ -1,4 +1,4 @@
-# app_structure
+<!-- # app_structure -->
 
 A new Flutter project.
 

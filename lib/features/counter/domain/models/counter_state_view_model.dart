@@ -7,10 +7,18 @@ part of counter;
 /// or the builder will not work so we have to expose it.
 @MappableClass()
 class CounterStateViewModel with CounterStateViewModelMappable {
-  final int count;
+  final List<WidgetWithId> addedWidgets;
+  final List<WidgetWithId> removedWidgets;
 
   CounterStateViewModel({
-    required this.count,
+    required this.addedWidgets,
+    required this.removedWidgets,
   });
+}
 
+class WidgetWithId {
+  final String id;
+  final Widget widget;
+
+  WidgetWithId({required this.id, required this.widget});
 }

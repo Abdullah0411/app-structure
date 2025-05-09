@@ -5,21 +5,77 @@ part of counter;
 class _CounterNotifier extends Notifier<CounterStateViewModel> {
   @override
   CounterStateViewModel build() {
-    return CounterStateViewModel(count: 0);
+    return CounterStateViewModel(
+        addedWidgets: List.generate(
+          2,
+          (index) => WidgetWithId(
+            id: '$index',
+            widget: AnimatedTo.spring(
+              globalKey: GlobalKey(),
+              description: const SpringDescription(
+                mass: 1.0,
+                stiffness: 175,
+                damping: 21,
+              ),
+              // curve: Curves.ease,
+              child: Container(
+                height: 100,
+                width: 100,
+                decoration: BoxDecoration(
+                  color: Colors.red,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+              ),
+            ),
+          ),
+        ),
+        removedWidgets: List.generate(
+          2,
+          (index) => WidgetWithId(
+            id: '${index + 2}',
+            widget: AnimatedTo.spring(
+              globalKey: GlobalKey(),
+              description: const SpringDescription(
+                mass: 1.0,
+                stiffness: 175,
+                damping: 21,
+              ),
+              // curve: Curves.ease,
+              child: Container(
+                height: 100,
+                width: 100,
+                decoration: BoxDecoration(
+                  color: Colors.red,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+              ),
+            ),
+          ),
+        ));
   }
 
-  void increment() {
-    /// state is a getter that returns the current state of the notifier
+  void addOrRemoveWidget({required WidgetWithId widget}) {
     final currentState = state;
 
-    /// since this is not an async notier we can directly modify the state directly
+    final isAlreadyAdded = currentState.addedWidgets.any((e) => e.id == widget.id);
 
-    // state = state.copyWith(count: state.count + 1);
-    state = currentState.copyWith(count: currentState.count + 1);
-  }
-
-  void decrement() {
-    state = state.copyWith(count: state.count - 1);
+    if (isAlreadyAdded) {
+      state = currentState.copyWith(
+        removedWidgets: [
+          ...currentState.removedWidgets,
+          widget,
+        ],
+        addedWidgets: currentState.addedWidgets.where((e) => e.id != widget.id).toList(),
+      );
+    } else {
+      state = currentState.copyWith(
+        addedWidgets: [
+          ...currentState.addedWidgets,
+          widget,
+        ],
+        removedWidgets: currentState.removedWidgets.where((e) => e.id != widget.id).toList(),
+      );
+    }
   }
 
   /// this is the provider that will be used to provide the notifier to the widgets

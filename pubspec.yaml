@@ -21,13 +21,14 @@ dependencies:
   # animations
   flutter_animate: ^4.5.2
   fluid_animations: ^1.1.0
+  animated_to: ^0.3.2
+  sprung: ^3.0.1
   
   # state management
   flutter_riverpod: ^2.6.1
 
   # Serialization
   dart_mappable: ^4.3.0
-  animated_to: ^0.3.2
 
 
 

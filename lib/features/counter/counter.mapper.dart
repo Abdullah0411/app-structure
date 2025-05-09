@@ -21,17 +21,25 @@ class CounterStateViewModelMapper
   @override
   final String id = 'CounterStateViewModel';
 
-  static int _$count(CounterStateViewModel v) => v.count;
-  static const Field<CounterStateViewModel, int> _f$count =
-      Field('count', _$count);
+  static List<WidgetWithId> _$addedWidgets(CounterStateViewModel v) =>
+      v.addedWidgets;
+  static const Field<CounterStateViewModel, List<WidgetWithId>>
+      _f$addedWidgets = Field('addedWidgets', _$addedWidgets);
+  static List<WidgetWithId> _$removedWidgets(CounterStateViewModel v) =>
+      v.removedWidgets;
+  static const Field<CounterStateViewModel, List<WidgetWithId>>
+      _f$removedWidgets = Field('removedWidgets', _$removedWidgets);
 
   @override
   final MappableFields<CounterStateViewModel> fields = const {
-    #count: _f$count,
+    #addedWidgets: _f$addedWidgets,
+    #removedWidgets: _f$removedWidgets,
   };
 
   static CounterStateViewModel _instantiate(DecodingData data) {
-    return CounterStateViewModel(count: data.dec(_f$count));
+    return CounterStateViewModel(
+        addedWidgets: data.dec(_f$addedWidgets),
+        removedWidgets: data.dec(_f$removedWidgets));
   }
 
   @override
@@ -91,7 +99,12 @@ abstract class CounterStateViewModelCopyWith<
     $R,
     $In extends CounterStateViewModel,
     $Out> implements ClassCopyWith<$R, $In, $Out> {
-  $R call({int? count});
+  ListCopyWith<$R, WidgetWithId, ObjectCopyWith<$R, WidgetWithId, WidgetWithId>>
+      get addedWidgets;
+  ListCopyWith<$R, WidgetWithId, ObjectCopyWith<$R, WidgetWithId, WidgetWithId>>
+      get removedWidgets;
+  $R call(
+      {List<WidgetWithId>? addedWidgets, List<WidgetWithId>? removedWidgets});
   CounterStateViewModelCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
       Then<$Out2, $R2> t);
 }
@@ -105,11 +118,29 @@ class _CounterStateViewModelCopyWithImpl<$R, $Out>
   late final ClassMapperBase<CounterStateViewModel> $mapper =
       CounterStateViewModelMapper.ensureInitialized();
   @override
-  $R call({int? count}) =>
-      $apply(FieldCopyWithData({if (count != null) #count: count}));
+  ListCopyWith<$R, WidgetWithId, ObjectCopyWith<$R, WidgetWithId, WidgetWithId>>
+      get addedWidgets => ListCopyWith(
+          $value.addedWidgets,
+          (v, t) => ObjectCopyWith(v, $identity, t),
+          (v) => call(addedWidgets: v));
   @override
-  CounterStateViewModel $make(CopyWithData data) =>
-      CounterStateViewModel(count: data.get(#count, or: $value.count));
+  ListCopyWith<$R, WidgetWithId, ObjectCopyWith<$R, WidgetWithId, WidgetWithId>>
+      get removedWidgets => ListCopyWith(
+          $value.removedWidgets,
+          (v, t) => ObjectCopyWith(v, $identity, t),
+          (v) => call(removedWidgets: v));
+  @override
+  $R call(
+          {List<WidgetWithId>? addedWidgets,
+          List<WidgetWithId>? removedWidgets}) =>
+      $apply(FieldCopyWithData({
+        if (addedWidgets != null) #addedWidgets: addedWidgets,
+        if (removedWidgets != null) #removedWidgets: removedWidgets
+      }));
+  @override
+  CounterStateViewModel $make(CopyWithData data) => CounterStateViewModel(
+      addedWidgets: data.get(#addedWidgets, or: $value.addedWidgets),
+      removedWidgets: data.get(#removedWidgets, or: $value.removedWidgets));
 
   @override
   CounterStateViewModelCopyWith<$R2, CounterStateViewModel, $Out2>
